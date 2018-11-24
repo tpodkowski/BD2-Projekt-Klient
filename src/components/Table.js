@@ -3,7 +3,7 @@ import React from 'react';
 const Table = ({
   list = [],
   handleDelete = () => {},
-}) => (
+}) => list.length > 0 && (
   <table className="table table-striped">
     <thead>
       <tr>

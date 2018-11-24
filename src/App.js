@@ -44,7 +44,7 @@ class App extends Component {
       clientList,
     } = this.state;
 
-    return clientList.length > 0 && (
+    return (
       <div className="container">
         <Navbar
           handleAdd={() => {}}
