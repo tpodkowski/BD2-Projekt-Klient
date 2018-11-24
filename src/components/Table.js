@@ -4,7 +4,7 @@ const Table = ({
   list = [],
   handleDelete = () => {},
 }) => (
-  <table className="table">
+  <table className="table table-striped">
     <thead>
       <tr>
         {Object.keys(list[0]).map((key, index) => (
