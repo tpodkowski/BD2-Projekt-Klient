@@ -20,14 +20,14 @@ const Navbar = ({
             <option
               key={index}
               value={category}
-              >{category}</option>
+            >{category}</option>
           ))}
         </select>
       </div>
     </div>
 
     <div className="col">
-      <button className="btn btn-primary" onClick={handleAdd}>Dodaj klienta</button>
+      <button className="btn btn-primary" onClick={handleAdd}>Dodaj element</button>
     </div>
   </div>
 );
