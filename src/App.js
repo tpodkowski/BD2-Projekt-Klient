@@ -1,21 +1,41 @@
 import React, { Component } from 'react';
-import Axios from 'axios';
+import axios from 'axios';
+import Navbar from './components/Navbar';
+import Table from './components/Table';
 import './App.css';
+
+const BASE_URL = 'http://localhost:3000/api/';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       clientList: [],
+      activeTable: 'klienci',
     }
+
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleTableChange = this.handleTableChange.bind(this);
   }
   componentDidMount() {
     this.fetchClients();
   }
   
   fetchClients() {
-    Axios.get('http://localhost:3000/api/klienci')
+    const { activeTable } = this.state;
+    axios.get(`${BASE_URL}${activeTable}`)
       .then(({ data }) => this.setState({ clientList: data }))
+  }
+
+  handleDelete(clientId) {
+    const { activeTable } = this.state;
+    axios.delete(`${BASE_URL}${activeTable}/${clientId}`)
+      .then(({ data }) => this.setState({ clientList: data}));
+  }
+
+  handleTableChange({ target }) {
+    const activeTable = target.value;
+    this.setState({ activeTable }, this.fetchClients);
   }
 
   render() {
@@ -25,33 +45,16 @@ class App extends Component {
 
     return clientList.length > 0 && (
       <div className="container">
+        <Navbar
+          handleAdd={() => {}}
+          activeTable={this.state.activeTable}
+          handleTableChange={this.handleTableChange}
+        />
         <div className="row">
-          <button className="btn btn-primary">Dodaj klienta</button>
-          <button className="btn btn-danger">Usuń klienta</button>
-        </div>
-        <div className="row">
-          <table className="table">
-            <thead>
-              <tr>
-                {Object.keys(clientList[0]).map((key, index) => (
-                  <th key={index}>
-                    { key }
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {clientList.map(client => (
-                <tr key={client.id}>
-                  {Object.values(client).map((cell, index) => (
-                    <td key={index}>
-                      { cell }
-                    </td> 
-                  ))}
-                </tr>
-              ))} 
-            </tbody>
-          </table>
+          <Table 
+            list={this.state.clientList}
+            handleDelete={this.handleDelete}
+          />
         </div>
       </div>
     );
