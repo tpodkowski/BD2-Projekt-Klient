@@ -25,7 +25,7 @@ const Table = ({
           ))}
           <td>
             <button
-              className="btn btn-danger"
+              className="btn btn-sm btn-danger"
               onClick={() => handleDelete(row.id)}>X</button>
           </td>
         </tr>

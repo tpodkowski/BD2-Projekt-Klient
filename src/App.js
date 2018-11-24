@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Navbar from './components/Navbar';
 import Table from './components/Table';
+import TABLES from './const/Tables';
 import './App.css';
 
 const BASE_URL = 'http://localhost:3000/api/';
@@ -11,7 +12,7 @@ class App extends Component {
     super(props);
     this.state = {
       clientList: [],
-      activeTable: 'klienci',
+      activeTable: TABLES.CATEGORIES,
     }
 
     this.handleDelete = this.handleDelete.bind(this);

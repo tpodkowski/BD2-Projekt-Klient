@@ -1,4 +1,5 @@
 import React from 'react';
+import TABLES from '../const/Tables';
 
 const Navbar = ({
   activeTable,
@@ -15,8 +16,12 @@ const Navbar = ({
           onChange={handleTableChange}
           value={activeTable}
         >
-          <option value="kategorie">Kategorie</option>
-          <option value="klienci">Klienci</option>
+          {Object.values(TABLES).map((category, index) =>(
+            <option
+              key={index}
+              value={category}
+              >{category}</option>
+          ))}
         </select>
       </div>
     </div>
