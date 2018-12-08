@@ -5,6 +5,7 @@ import serialize from 'form-serialize';
 
 import Navbar from './components/Navbar';
 import Table from './components/Table';
+import EditModal from './components/EditModal';
 import TABLES from './const/Tables';
 import './App.css';
 
@@ -17,15 +18,20 @@ class App extends Component {
       clientList: [],
       activeTable: TABLES.CATEGORIES,
       isAddModalOpen: false,
+      isEditModalOpen: false,
+      editedId: null,
     }
 
     this.addElementFormRef = React.createRef();
+    this.editElementFormRef = React.createRef();
 
     this.handleDelete = this.handleDelete.bind(this);
     this.handleTableChange = this.handleTableChange.bind(this);
     this.openAddModal = this.openAddModal.bind(this);
-    this.closeAddModal = this.closeAddModal.bind(this);
+    this.closeModals = this.closeModals.bind(this);
     this.handleElementAdd = this.handleElementAdd.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleElementEdit = this.handleElementEdit.bind(this);
   }
   componentDidMount() {
     this.fetchClients();
@@ -43,13 +49,23 @@ class App extends Component {
       .then(({ data }) => this.setState({ clientList: data}));
   }
 
+  handleEdit(id) {
+    this.setState({
+      editedId: id,
+      isEditModalOpen: true,
+    });
+  }
+
   handleTableChange({ target }) {
     const activeTable = target.value;
     this.setState({ activeTable }, this.fetchClients);
   }
 
-  closeAddModal() {
-    this.setState({ isAddModalOpen: false });
+  closeModals() {
+    this.setState({
+      isAddModalOpen: false,
+      isEditModalOpen: false,
+    });
   }
 
   openAddModal() {
@@ -63,8 +79,22 @@ class App extends Component {
     const formData = serialize(this.addElementFormRef.current, { hash: true });
 
     axios.post(`${BASE_URL}${activeTable}`, formData)
-      .then(({ data }) => this.setState({ clientList: data}, this.closeAddModal()));
+      .then(({ data }) => this.setState({ clientList: data}, this.closeModals()));
   }
+
+  handleElementEdit(event) {
+    event.preventDefault();
+
+    const { activeTable, editedId } = this.state;
+    const formData = serialize(this.editElementFormRef.current, { hash: true });
+
+    axios.patch(`${BASE_URL}${activeTable}/${editedId}`, formData)
+      .then(({ data }) => this.setState({
+        clientList: data,
+        editedId: null,
+      }, this.closeModals()));
+  }
+
 
   render() {
     const {
@@ -82,6 +112,7 @@ class App extends Component {
           <Table 
             list={clientList}
             handleDelete={this.handleDelete}
+            handleEdit={this.handleEdit}
           />
         </div>
         <Modal
@@ -106,7 +137,7 @@ class App extends Component {
               <button
                 type="button"
                 className="btn btn-link"
-                onClick={this.closeAddModal}
+                onClick={this.closeModals}
               >Anuluj</button>
               <button
                 type="submit"
@@ -115,6 +146,13 @@ class App extends Component {
             </div>
           </form>
         </Modal>
+        <EditModal
+          clientList={clientList}
+          isOpen={this.state.isEditModalOpen}
+          onClose={this.closeModals}
+          onSubmit={this.handleElementEdit}
+          reference={this.editElementFormRef}
+        />
       </div>
     );
   }
