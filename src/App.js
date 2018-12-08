@@ -109,49 +109,51 @@ class App extends Component {
           activeTable={this.state.activeTable}
           handleTableChange={this.handleTableChange}
         />
-        <Table 
-          list={clientList}
-          handleDelete={this.handleDelete}
-          handleEdit={this.handleEdit}
-        />
-        <Modal
-          isOpen={this.state.isAddModalOpen}
-          contentLabel="Minimal Modal Example"
-          className="add-modal shadow"
-        >
-          <h2>Dodaj element</h2>
-          <form ref={this.addElementFormRef} onSubmit={this.handleElementAdd}>
-            { clientList[0] && Object.keys(clientList[0]).map((list, index) => index > 0 ? (
-              <div className="form-group" key={index}>
-                <label htmlFor={`${list}-input`}>{list}</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name={list}
-                  id={`${list}-input`}
-                />
+        <div style={{ paddingTop: '54px' }}>
+          <Table 
+            list={clientList}
+            handleDelete={this.handleDelete}
+            handleEdit={this.handleEdit}
+          />
+          <Modal
+            isOpen={this.state.isAddModalOpen}
+            contentLabel="Minimal Modal Example"
+            className="add-modal shadow"
+          >
+            <h2>Dodaj element</h2>
+            <form ref={this.addElementFormRef} onSubmit={this.handleElementAdd}>
+              { clientList[0] && Object.keys(clientList[0]).map((list, index) => index > 0 ? (
+                <div className="form-group" key={index}>
+                  <label htmlFor={`${list}-input`}>{list}</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name={list}
+                    id={`${list}-input`}
+                  />
+                </div>
+              ) : null)}
+              <div className="row">
+                <button
+                  type="button"
+                  className="btn btn-link"
+                  onClick={this.closeModals}
+                >Anuluj</button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                >Dodaj</button>
               </div>
-            ) : null)}
-            <div className="row">
-              <button
-                type="button"
-                className="btn btn-link"
-                onClick={this.closeModals}
-              >Anuluj</button>
-              <button
-                type="submit"
-                className="btn btn-primary"
-              >Dodaj</button>
-            </div>
-          </form>
-        </Modal>
-        <EditModal
-          clientList={clientList.find(({ id }) => id === this.state.editedId)}
-          isOpen={this.state.isEditModalOpen}
-          onClose={this.closeModals}
-          onSubmit={this.handleElementEdit}
-          reference={this.editElementFormRef}
-        />
+            </form>
+          </Modal>
+          <EditModal
+            clientList={clientList.find(({ id }) => id === this.state.editedId)}
+            isOpen={this.state.isEditModalOpen}
+            onClose={this.closeModals}
+            onSubmit={this.handleElementEdit}
+            reference={this.editElementFormRef}
+          />
+        </div>
       </Fragment>
     );
   }

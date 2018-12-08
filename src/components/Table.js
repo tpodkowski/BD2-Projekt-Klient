@@ -37,7 +37,13 @@ const Table = ({
     </tbody>
   </table>
 ) : (
-  <div>Brak rekordów</div>
+  <div className="d-flex justify-content-center">
+    <div className="card text-center text-white bg-danger mb-3">
+      <div class="card-body">
+        <h3>Brak rekordów</h3>
+      </div>
+    </div>
+  </div>
 );
 
 export default Table;
