@@ -4,16 +4,16 @@ const Table = ({
   list = [],
   handleDelete = () => {},
   handleEdit = () => {},
-}) => list.length > 0 && (
-  <table className="table table-striped">
+}) => list.length > 0 ? (
+  <table className="table table-bordered table-striped">
     <thead>
       <tr>
         {Object.keys(list[0]).map((key, index) => (
-          <th key={index}>
+          <th key={index} style={!index ? { width: '50px' } : {}}>
           { key }
           </th>
         ))}
-        <th>Actions</th>
+        <th style={{ width: '150px' }}>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -36,6 +36,8 @@ const Table = ({
       ))} 
     </tbody>
   </table>
+) : (
+  <div>Brak rekordów</div>
 );
 
 export default Table;

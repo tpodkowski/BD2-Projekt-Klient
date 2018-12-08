@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
 import serialize from 'form-serialize';
@@ -39,6 +39,7 @@ class App extends Component {
   
   fetchClients() {
     const { activeTable } = this.state;
+  
     axios.get(`${BASE_URL}${activeTable}`)
       .then(({ data }) => this.setState({ clientList: data }))
   }
@@ -102,23 +103,21 @@ class App extends Component {
     } = this.state;
 
     return (
-      <div className="container">
+      <Fragment>
         <Navbar
           handleAdd={this.openAddModal}
           activeTable={this.state.activeTable}
           handleTableChange={this.handleTableChange}
         />
-        <div className="row">
-          <Table 
-            list={clientList}
-            handleDelete={this.handleDelete}
-            handleEdit={this.handleEdit}
-          />
-        </div>
+        <Table 
+          list={clientList}
+          handleDelete={this.handleDelete}
+          handleEdit={this.handleEdit}
+        />
         <Modal
           isOpen={this.state.isAddModalOpen}
           contentLabel="Minimal Modal Example"
-          className="add-modal"
+          className="add-modal shadow"
         >
           <h2>Dodaj element</h2>
           <form ref={this.addElementFormRef} onSubmit={this.handleElementAdd}>
@@ -147,13 +146,13 @@ class App extends Component {
           </form>
         </Modal>
         <EditModal
-          clientList={clientList}
+          clientList={clientList.find(({ id }) => id === this.state.editedId)}
           isOpen={this.state.isEditModalOpen}
           onClose={this.closeModals}
           onSubmit={this.handleElementEdit}
           reference={this.editElementFormRef}
         />
-      </div>
+      </Fragment>
     );
   }
 }
